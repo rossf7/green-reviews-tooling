@@ -1,0 +1,34 @@
+name: OpenTofu
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  opentofu:
+    name: OpenTofu
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: opentofu/setup-opentofu@v1
+
+    - run: cd infrastructure/equinix-metal
+
+    - name: Init
+      run: tofu init
+
+    - name: Plan
+      id: plan
+      run: tofu plan -no-color
+      continue-on-error: true
+      env:
+        TF_VAR_equinix_auth_token: ${{ secrets.EQUINIX_AUTH_TOKEN }}
+        TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
+
+    - name: Apply
+      id: apply
+      run: tofu apply -auto-approve
+      env:
+        TF_VAR_equinix_auth_token: ${{ secrets.equinix_auth_token }}
+        TF_VAR_project_id: ${{ secrets.project_id }}

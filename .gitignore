@@ -1,0 +1,5 @@
+infrastructure/equinix-metal/terraform.tfvars
+infrastructure/equinix-metal/terraform.tfstate
+infrastructure/equinix-metal/terraform.tfstate.backup
+infrastructure/equinix-metal/.terraform.lock.hcl
+infrastructure/equinix-metal/.terraform/
