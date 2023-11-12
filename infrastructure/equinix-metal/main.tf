@@ -34,9 +34,9 @@ resource "equinix_metal_device" "control_plane" {
   depends_on          = [equinix_metal_project_ssh_key.ssh_key]
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
   user_data           = <<EOF
-  #!/bin/bash
-  echo "TODO provision control-plane"
-  EOF
+#!/bin/bash
+echo "TODO provision control-plane"
+EOF
 
   behavior {
     allow_changes = [
@@ -56,9 +56,9 @@ resource "equinix_metal_device" "worker" {
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
   depends_on          = [equinix_metal_device.control_plane]
   user_data           = <<EOF
-  #!/bin/bash
-  echo "TODO provision worker"
-  EOF
+#!/bin/bash
+echo "TODO provision worker"
+EOF
 
   behavior {
     allow_changes = [
