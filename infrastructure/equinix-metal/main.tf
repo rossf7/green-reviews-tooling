@@ -2,7 +2,7 @@ terraform {
   required_providers {
     equinix = {
       source  = "equinix/equinix"
-      version = "1.13.0"
+      version = "1.19.0"
     }
   }
 
@@ -33,29 +33,36 @@ resource "equinix_metal_device" "control_plane" {
   project_id          = var.project_id
   depends_on          = [equinix_metal_project_ssh_key.ssh_key]
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
-}
-
-resource "local_file" "inventory" {
-  filename = "${path.module}/inventory.ini"
-
-  content = <<-EOF
-    [control_plane]
-    ${equinix_metal_device.control_plane.hostname} ansible_host=${equinix_metal_device.control_plane.access_public_ipv4} ansible_user=root
+  user_data           = <<EOF
+  #!/bin/bash
+  echo "TODO provision control-plane"
   EOF
 
-  depends_on = [
-    equinix_metal_device.control_plane
-  ]
+  behavior {
+    allow_changes = [
+      "user_data"
+    ]
+  }
 }
 
-resource "null_resource" "ansible_playbook" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+resource "equinix_metal_device" "worker" {
+  for_each            = toset(var.worker_nodes)
+  hostname            = "${var.cluster_name}-${each.value}"
+  plan                = var.device_plan
+  metro               = var.device_metro
+  operating_system    = var.device_os
+  billing_cycle       = var.billing_cycle
+  project_id          = var.project_id
+  project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
+  depends_on          = [equinix_metal_device.control_plane]
+  user_data           = <<EOF
+  #!/bin/bash
+  echo "TODO provision worker"
+  EOF
 
-  depends_on = [local_file.inventory]
-
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ${path.module}/inventory.ini ${path.module}/ansible-playbooks/main-playbook.yml"
+  behavior {
+    allow_changes = [
+      "user_data"
+    ]
   }
 }
