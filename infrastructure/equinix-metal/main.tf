@@ -44,7 +44,7 @@ resource "equinix_metal_device" "control_plane" {
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
   user_data           = <<EOF
   #!/bin/bash
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="v1.28.3+k3s2" K3S_TOKEN="${random_string.random.result}" sh -s - server \
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" K3S_TOKEN="${random_string.random.result}" sh -s - server \
 	--node-taint CriticalAddonsOnly=true:NoExecute \
 	--flannel-backend=none \
 	--disable-network-policy
@@ -75,7 +75,7 @@ resource "equinix_metal_device" "worker" {
   depends_on          = [equinix_metal_device.control_plane]
   user_data           = <<EOF
   #!/bin/bash
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="v1.28.3+k3s2" sh -s - agent --token "${random_string.random.result}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${random_string.random.result}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
   EOF
 
   behavior {
