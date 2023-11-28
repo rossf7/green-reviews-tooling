@@ -2,7 +2,7 @@ terraform {
   required_providers {
     equinix = {
       source  = "equinix/equinix"
-      version = "1.19.0"
+      version = "1.13.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -49,6 +49,7 @@ resource "equinix_metal_device" "control_plane" {
 	--flannel-backend=none \
 	--disable-network-policy
   EOF
+
 
   behavior {
     allow_changes = [
