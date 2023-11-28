@@ -61,6 +61,8 @@ resource "equinix_metal_device" "control_plane" {
 // NOTE: need to check if we need to execute a command in the controlplane to verify that k3s.service is up and running
 // before we try to make workerplanes to join
 
+// to extract KUBECONFIG we need to copy file in controlplane:/etc/rancher/k3s/k3s.yaml
+
 resource "equinix_metal_device" "worker" {
   for_each            = toset(var.worker_nodes)
   hostname            = "${var.cluster_name}-${each.value}"
