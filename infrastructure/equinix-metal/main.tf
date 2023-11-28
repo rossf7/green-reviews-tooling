@@ -4,10 +4,6 @@ terraform {
       source  = "equinix/equinix"
       version = "1.13.0"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.5.1"
-    }
   }
 
   backend "s3" {
@@ -28,11 +24,6 @@ resource "equinix_metal_project_ssh_key" "ssh_key" {
   public_key = var.ssh_public_key
 }
 
-resource "random_string" "random" {
-  length  = 16
-  special = false
-}
-
 resource "equinix_metal_device" "control_plane" {
   hostname            = "${var.cluster_name}-control-plane"
   plan                = var.device_plan
@@ -44,7 +35,7 @@ resource "equinix_metal_device" "control_plane" {
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
   user_data           = <<EOF
   #!/bin/bash
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" K3S_TOKEN="${random_string.random.result}" sh -s - server \
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" K3S_TOKEN="${var.k3s_agent_token}" sh -s - server \
 	--node-taint CriticalAddonsOnly=true:NoExecute \
 	--flannel-backend=none \
 	--disable-network-policy
@@ -75,7 +66,7 @@ resource "equinix_metal_device" "worker" {
   depends_on          = [equinix_metal_device.control_plane]
   user_data           = <<EOF
   #!/bin/bash
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${random_string.random.result}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
   EOF
 
   behavior {
