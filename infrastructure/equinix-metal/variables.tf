@@ -34,22 +34,22 @@ variable "device_plan" {
   default     = "m3.small.x86"
 }
 
-variable "flux_version" {
-  description = "Flux cli version"
-  type        = string
-  default     = "2.1.2"
-}
-
-variable "github_token" {
+variable "flux_github_token" {
   description = "GitHub token for Flux"
   type        = string
   sensitive = true
 }
 
-variable "github_user" {
+variable "flux_github_user" {
   description = "GitHub user for Flux"
   type        = string
   default     = "cncf-tags"
+}
+
+variable "flux_version" {
+  description = "Flux CLI version"
+  type        = string
+  default     = "2.1.2"
 }
 
 variable "k3s_version" {

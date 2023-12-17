@@ -65,9 +65,9 @@ resource "equinix_metal_device" "worker" {
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
   depends_on          = [equinix_metal_device.control_plane]
   user_data           = <<EOF
-  #!/bin/bash
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
-  EOF
+#!/bin/bash
+curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
+EOF
 
   behavior {
     allow_changes = [
@@ -115,7 +115,7 @@ resource "null_resource" "bootstrap_flux" {
   provisioner "remote-exec" {
     inline = [
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
-      "GITHUB_TOKEN=${var.github_token} flux bootstrap github --owner=${var.github_user} --repository=green-reviews-tooling --path=clusters"
+      "GITHUB_TOKEN=${var.flux_github_token} flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
   }
 }
