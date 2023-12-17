@@ -3,7 +3,7 @@ name: OpenTofu
 on:
   push:
     branches:
-    - main
+    - wip-opentofu-spike-test
 
 defaults:
   run:
