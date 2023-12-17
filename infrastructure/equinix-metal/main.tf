@@ -77,7 +77,7 @@ resource "equinix_metal_device" "worker" {
 }
 
 resource "null_resource" "install_cilium_cni" {
-  depends_on          = [equinix_metal_device.control_plane, equinix_metal_device.worker]
+  depends_on          = [equinix_metal_device.control_plane]
 
   connection {
     user = "root"
