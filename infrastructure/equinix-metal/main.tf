@@ -106,7 +106,7 @@ resource "null_resource" "install_cilium_cni" {
   }
 }
 
-resource "null_resource" "bootstrap_flux" {
+resource "null_resource" "github_token" {
   depends_on          = [null_resource.install_cilium_cni]
   triggers = {
     always_run = "${timestamp()}"
@@ -122,12 +122,27 @@ resource "null_resource" "bootstrap_flux" {
     content = "export GITHUB_TOKEN=${var.flux_github_token}"
     destination = "/tmp/github_token"
   }
+}
+
+resource "null_resource" "bootstrap_flux" {
+  depends_on          = [null_resource.github_token]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  connection {
+    user = "root"
+    private_key = file(var.ssh_private_key_path)
+    host = equinix_metal_device.control_plane.access_public_ipv4
+  }
 
   provisioner "remote-exec" {
     inline = [
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
       "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml",
-      "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters --token=${var.flux_github_token}"
+      "source /tmp/github_token",
+      "rm /tmp/github_token",
+      "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
   }
 }
