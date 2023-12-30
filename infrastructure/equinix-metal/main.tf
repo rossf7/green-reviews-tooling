@@ -78,6 +78,9 @@ EOF
 
 resource "null_resource" "install_cilium_cni" {
   depends_on          = [equinix_metal_device.control_plane]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 
   connection {
     user = "root"
@@ -105,6 +108,9 @@ resource "null_resource" "install_cilium_cni" {
 
 resource "null_resource" "bootstrap_flux" {
   depends_on          = [null_resource.install_cilium_cni]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 
   connection {
     user = "root"
