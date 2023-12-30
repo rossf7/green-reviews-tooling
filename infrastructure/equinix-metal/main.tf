@@ -118,6 +118,11 @@ resource "null_resource" "bootstrap_flux" {
     host = equinix_metal_device.control_plane.access_public_ipv4
   }
 
+  provisioner "file" {
+    content = "export GITHUB_TOKEN=${var.flux_github_token}"
+    destination = "/tmp/github_token"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
