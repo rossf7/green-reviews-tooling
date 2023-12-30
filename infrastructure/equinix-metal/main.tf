@@ -117,11 +117,16 @@ resource "null_resource" "bootstrap_flux" {
     private_key = file(var.ssh_private_key_path)
     host = equinix_metal_device.control_plane.access_public_ipv4
   }
+ 
+  provisioner "remote-exec" {
+    inline = [
+      "export GITHUB_TOKEN=${var.flux_github_token}",
+    ]
+  }
 
   provisioner "remote-exec" {
     inline = [
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
-      "export GITHUB_TOKEN=${var.flux_github_token}",
       "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml",
       "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
