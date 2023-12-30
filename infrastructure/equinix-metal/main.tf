@@ -141,7 +141,6 @@ resource "null_resource" "bootstrap_flux" {
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
       "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml",
       "source /tmp/github_token",
-      "rm /tmp/github_token",
       "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
   }
