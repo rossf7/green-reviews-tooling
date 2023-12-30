@@ -43,7 +43,7 @@ variable "flux_github_token" {
 variable "flux_github_user" {
   description = "GitHub user for Flux"
   type        = string
-  default     = "cncf-tags"
+  default     = "rossf7"
 }
 
 variable "flux_version" {
