@@ -119,7 +119,7 @@ resource "null_resource" "github_token" {
   }
 
   provisioner "file" {
-    content = "export GITHUB_TOKEN=${var.flux_github_token}"
+    content = "GITHUB_TOKEN=${var.flux_github_token}"
     destination = "/tmp/github_token"
   }
 }
@@ -138,8 +138,9 @@ resource "null_resource" "bootstrap_flux" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
+      "export $(cat /tmp/github_token | xargs) && env",
       "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml",
+      "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
       "source /tmp/github_token",
       "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
