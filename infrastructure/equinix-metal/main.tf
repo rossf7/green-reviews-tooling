@@ -54,27 +54,27 @@ resource "equinix_metal_device" "control_plane" {
 
 // NOTE: to extract KUBECONFIG we need to copy kubeconfig in controlplane:/etc/rancher/k3s/k3s.yaml
 
-resource "equinix_metal_device" "worker" {
-  for_each            = toset(var.worker_nodes)
-  hostname            = "${var.cluster_name}-${each.value}"
-  plan                = var.device_plan
-  metro               = var.device_metro
-  operating_system    = var.device_os
-  billing_cycle       = var.billing_cycle
-  project_id          = var.project_id
-  project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
-  depends_on          = [equinix_metal_device.control_plane]
-  user_data           = <<EOF
-#!/bin/bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
-EOF
+# resource "equinix_metal_device" "worker" {
+#   for_each            = toset(var.worker_nodes)
+#   hostname            = "${var.cluster_name}-${each.value}"
+#   plan                = var.device_plan
+#   metro               = var.device_metro
+#   operating_system    = var.device_os
+#   billing_cycle       = var.billing_cycle
+#   project_id          = var.project_id
+#   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
+#   depends_on          = [equinix_metal_device.control_plane]
+#   user_data           = <<EOF
+# #!/bin/bash
+# curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
+# EOF
 
-  behavior {
-    allow_changes = [
-      "user_data"
-    ]
-  }
-}
+#   behavior {
+#     allow_changes = [
+#       "user_data"
+#     ]
+#   }
+# }
 
 resource "null_resource" "install_cilium_cni" {
   depends_on          = [equinix_metal_device.control_plane]
@@ -140,6 +140,7 @@ resource "null_resource" "bootstrap_flux" {
     inline = [
       "export $(cat /tmp/github_token | xargs) && env",
       "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml",
+      "printenv",
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
       "flux bootstrap github --owner=${var.flux_github_user} --repository=green-reviews-tooling --path=clusters"
     ]
