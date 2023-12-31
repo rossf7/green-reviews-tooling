@@ -120,7 +120,6 @@ resource "null_resource" "flux_env_vars" {
 
   provisioner "file" {
     content = <<EOF
-FLUX_VERSION=${var.flux_version}
 GITHUB_TOKEN=${var.flux_github_token}
 KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 EOF
@@ -143,7 +142,7 @@ resource "null_resource" "bootstrap_flux" {
   provisioner "remote-exec" {
     inline = [
       "export $(cat /tmp/flux_env_vars | xargs) && env && rm /tmp/flux_env_vars",
-      "curl -s https://fluxcd.io/install.sh | sudo bash",
+      "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
       "flux bootstrap github --owner=${var.flux_github_user} --repository=${var.flux_github_repo} --path=clusters"
     ]
   }
