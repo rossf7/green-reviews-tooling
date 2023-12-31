@@ -40,6 +40,12 @@ variable "flux_github_token" {
   sensitive = true
 }
 
+variable "flux_github_repo" {
+  description = "GitHub repository for Flux"
+  type        = string
+  default     = "green-reviews-tooling"
+}
+
 variable "flux_github_user" {
   description = "GitHub user for Flux"
   type        = string
