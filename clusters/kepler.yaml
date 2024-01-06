@@ -23,8 +23,8 @@ spec:
   values:
     serviceMonitor:
       enabled: "true"
-      namespace: "monitoring"
-  targetNamespace: kepler
+      namespace: monitoring
+  targetNamespace: monitoring
   install:
     createNamespace: true
   chart:
