@@ -61,7 +61,7 @@ variable "flux_version" {
 variable "k3s_version" {
   description = "k3s version for the cluster"
   type        = string
-  default     = "v1.28.3+k3s2"
+  default     = "v1.29.0+k3s1"
 }
 
 variable "k3s_token" {
