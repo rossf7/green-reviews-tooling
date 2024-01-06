@@ -64,8 +64,8 @@ variable "k3s_version" {
   default     = "v1.28.3+k3s2"
 }
 
-variable "k3s_agent_token" {
-  description = "agent token for joining workernodes with the controlplane"
+variable "k3s_token" {
+  description = "k3s token for joining nodes to the cluster"
   type = string
   sensitive = true
 }

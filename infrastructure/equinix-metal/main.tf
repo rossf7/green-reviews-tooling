@@ -53,7 +53,7 @@ resource "equinix_metal_device" "control_plane" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=${var.k3s_version} K3S_TOKEN=${var.k3s_agent_token} sh -s - server --node-taint CriticalAddonsOnly=true:NoExecute --flannel-backend=none --disable-network-policy --disable=traefik",
+      "curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=${var.k3s_version} K3S_TOKEN=${var.k3s_token} sh -s - server --node-taint CriticalAddonsOnly=true:NoExecute --flannel-backend=none --disable-network-policy --disable=traefik",
       "systemctl is-active --quiet k3s.service",
     ]
   }
@@ -73,7 +73,7 @@ resource "equinix_metal_device" "worker" {
   depends_on          = [equinix_metal_device.control_plane]
   user_data           = <<EOF
 #!/bin/bash
-curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_agent_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
+curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${var.k3s_version}" sh -s - agent --token "${var.k3s_token}" --server "https://${equinix_metal_device.control_plane.access_private_ipv4}:6443"
 EOF
 
   behavior {
