@@ -37,6 +37,13 @@ resource "equinix_metal_device" "control_plane" {
   project_id          = var.project_id
   depends_on          = [equinix_metal_project_ssh_key.ssh_key]
   project_ssh_key_ids = [equinix_metal_project_ssh_key.ssh_key.id]
+  
+  behavior {
+    allow_changes = [
+      "custom_data",
+      "user_data"
+    ]
+  }
 
   connection {
     user = "root"
@@ -71,6 +78,7 @@ EOF
 
   behavior {
     allow_changes = [
+      "custom_data",
       "user_data"
     ]
   }
