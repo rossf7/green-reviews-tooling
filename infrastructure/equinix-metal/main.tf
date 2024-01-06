@@ -2,7 +2,7 @@ terraform {
   required_providers {
     equinix = {
       source  = "equinix/equinix"
-      version = "1.13.0"
+      version = "1.22.0"
     }
     null = {
       source = "hashicorp/null"
@@ -46,7 +46,7 @@ resource "equinix_metal_device" "control_plane" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=${var.k3s_version} K3S_TOKEN=${var.k3s_agent_token} sh -s - server --node-taint CriticalAddonsOnly=true:NoExecute --flannel-backend=none --disable-network-policy",
+      "curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL=${var.k3s_version} K3S_TOKEN=${var.k3s_agent_token} sh -s - server --node-taint CriticalAddonsOnly=true:NoExecute --flannel-backend=none --disable-network-policy --disable-traefik",
       "systemctl is-active --quiet k3s.service",
     ]
   }
@@ -78,9 +78,6 @@ EOF
 
 resource "null_resource" "install_cilium_cni" {
   depends_on          = [equinix_metal_device.control_plane]
-  triggers = {
-    always_run = "${timestamp()}"
-  }
 
   connection {
     user = "root"
@@ -108,9 +105,6 @@ resource "null_resource" "install_cilium_cni" {
 
 resource "null_resource" "flux_env_vars" {
   depends_on          = [null_resource.install_cilium_cni]
-  triggers = {
-    always_run = "${timestamp()}"
-  }
 
   connection {
     user = "root"
@@ -129,9 +123,6 @@ EOF
 
 resource "null_resource" "bootstrap_flux" {
   depends_on          = [null_resource.flux_env_vars]
-  triggers = {
-    always_run = "${timestamp()}"
-  }
 
   connection {
     user = "root"
@@ -143,7 +134,7 @@ resource "null_resource" "bootstrap_flux" {
     inline = [
       "export $(cat /tmp/flux_env_vars | xargs) && env && rm /tmp/flux_env_vars",
       "curl -s https://fluxcd.io/install.sh | sudo FLUX_VERSION=${var.flux_version} bash",
-      "flux bootstrap github --owner=${var.flux_github_user} --repository=${var.flux_github_repo} --path=clusters"
+      "flux bootstrap github --owner=${var.flux_github_user} --repository=${var.flux_github_repo} --path=clusters --branch=wip-tofu-test"
     ]
   }
 }
