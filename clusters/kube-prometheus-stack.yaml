@@ -17,10 +17,10 @@ metadata:
 spec:
   interval: 24h
   values:
-    prometheusSpec:
-      serviceMonitorSelector: {}
-      # Select all servicemonitors not just those in this chart
-      serviceMonitorSelectorNilUsesHelmValues: "false"
+    prometheus:
+      prometheusSpec:
+        # Select all servicemonitors not just those in chart
+        serviceMonitorSelectorNilUsesHelmValues: "false"
   targetNamespace: monitoring
   install:
     createNamespace: true
