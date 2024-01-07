@@ -18,6 +18,7 @@ spec:
   interval: 24h
   values:
     prometheusSpec:
+      serviceMonitorSelector: {}
       # Select all servicemonitors not just those in this chart
       serviceMonitorSelectorNilUsesHelmValues: "false"
   targetNamespace: monitoring
