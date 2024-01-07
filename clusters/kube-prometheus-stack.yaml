@@ -19,7 +19,7 @@ spec:
   values:
     prometheus:
       prometheusSpec:
-        # Select all servicemonitors not just those in chart
+        serviceMonitorSelector: {}
         serviceMonitorSelectorNilUsesHelmValues: "false"
   targetNamespace: monitoring
   install:
