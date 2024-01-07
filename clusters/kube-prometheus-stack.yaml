@@ -16,6 +16,10 @@ metadata:
   namespace: flux-system
 spec:
   interval: 24h
+  values:
+    prometheusSpec:
+      # Select all servicemonitors not just those in this chart
+      serviceMonitorSelectorNilUsesHelmValues: false
   targetNamespace: monitoring
   install:
     createNamespace: true
