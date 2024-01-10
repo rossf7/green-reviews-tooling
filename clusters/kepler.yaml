@@ -24,7 +24,7 @@ spec:
     serviceMonitor:
       enabled: "true"
       namespace: "monitoring"
-  targetNamespace: kepler
+  targetNamespace: monitoring
   install:
     createNamespace: true
   chart:
@@ -34,3 +34,5 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kepler
+  dependsOn:
+    - name: kube-prometheus-stack
