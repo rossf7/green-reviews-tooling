@@ -204,15 +204,6 @@ We will have a node to deploy the project and another to run the benchmarks
 so we will use [concurrency](https://docs.github.com/en/actions/using-jobs/using-concurrency)
 to only allow a single execution of the pipeline at any one time.
 
-> [!NOTE]
-> Here fine grained PAT is used
-> - Read access to code and metadata
-> - Read write access to actions
-
-> [!IMPORTANT]
-> We'll need to create these and provide it to the Falco team, aka any future CNCF project we are going to use for benchmarking.
-
-
 ### Cleanup
 
 On completion of the pipeline whether it was successful or failed the flux
