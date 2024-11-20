@@ -113,7 +113,8 @@ variable "worker_nodes" {
     labels = map(string)
     plan   = string
   }))
-  default = {
+  default = {}
+    /*
     internal-1 = {
       elastic_ip = "monitoring"
       labels = {
@@ -130,4 +131,5 @@ variable "worker_nodes" {
       plan = "m3.small.x86"
     }
   }
+  */
 }

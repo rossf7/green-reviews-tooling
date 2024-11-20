@@ -7,5 +7,11 @@ spec:
   template:
     spec:
       nodeSelector:
-        cncf-project: wg-green-reviews
-        cncf-project-sub: internal
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+
+      

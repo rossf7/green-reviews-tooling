@@ -26,43 +26,70 @@ spec:
     alertmanager:
       alertmanagerSpec:
         nodeSelector:
-          cncf-project: wg-green-reviews
-          cncf-project-sub: internal
+          node-role.kubernetes.io/control-plane: "true"
+        tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Equal"
+            value: "true"
+            effect: "NoSchedule"
 
     grafana:
       ingress:
         enabled: true
       nodeSelector:
-        cncf-project: wg-green-reviews
-        cncf-project-sub: internal
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
 
     kube-state-metrics:
       nodeSelector:
-        cncf-project: wg-green-reviews
-        cncf-project-sub: internal
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
 
     prometheus:
       prometheusSpec:
         nodeSelector:
-          cncf-project: wg-green-reviews
-          cncf-project-sub: internal
-
+          node-role.kubernetes.io/control-plane: "true"
+        tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Equal"
+            value: "true"
+            effect: "NoSchedule"
         serviceMonitorSelectorNilUsesHelmValues: false
 
     prometheusOperator:
       admissionWebhooks:
         patch:
           nodeSelector:
-            cncf-project: wg-green-reviews
-            cncf-project-sub: internal
+            node-role.kubernetes.io/control-plane: "true"
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
 
         deployment:
           nodeSelector:
-            cncf-project: wg-green-reviews
-            cncf-project-sub: internal
+            node-role.kubernetes.io/control-plane: "true"
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
 
       nodeSelector:
-        cncf-project: wg-green-reviews
-        cncf-project-sub: internal
+        node-role.kubernetes.io/control-plane: "true"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
 
   targetNamespace: monitoring
