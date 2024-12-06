@@ -20,11 +20,9 @@ jobs:
         uses: azure/setup-kubectl@v4
       - name: Install kepler
         run: |
-          kubectl apply -f clusters/base/monitoring-namespace.yaml
-          kubectl apply -f clusters/base/kube-prometheus-stack.yaml
-          kubectl apply -f clusters/base/kepler.yaml
+          kubectl apply -f clusters/base/
 
-          sleep 30
+          sleep 20
 
           kubectl get helmrelease -A
           kubectl get pods -A
