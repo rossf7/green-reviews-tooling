@@ -26,6 +26,14 @@ jobs:
 
           kubectl get helmrelease -A
           kubectl get pods -A
+          
+          kubectl wait pod \
+          --all \
+          --for=condition=Ready \
+          --namespace monitoring
+          
+          kubectl get helmrelease -A
+          kubectl get pods -A
 
           kubectl wait pod \
           --all \
