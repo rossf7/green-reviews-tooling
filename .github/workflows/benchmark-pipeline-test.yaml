@@ -12,6 +12,8 @@ jobs:
         uses: fluxcd/flux2/action@main
       - name: Setup Kubernetes Kind
         uses: helm/kind-action@main
+        with:
+          config: hack/kind-config.yaml
       - name: Install Flux in Kubernetes Kind
         run: flux install
       - name: Install kubectl
