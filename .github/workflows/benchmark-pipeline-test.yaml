@@ -20,6 +20,7 @@ jobs:
         uses: azure/setup-kubectl@v4
       - name: Install kepler
         run: |
+          kubectl apply -f clusters/base/monitoring-namespace.yaml
           kubectl apply -f clusters/base/
 
           sleep 20
