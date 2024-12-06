@@ -1,19 +1,8 @@
-# kind-config.yaml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "cncf-project=wg-green-reviews,cncf-project-sub=internal"
 - role: worker
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "node-role.kubernetes.io/benchmark=true"
-
+  labels:
+    cncf-project: wg-green-reviews
+    cncf-project-sub: internal
