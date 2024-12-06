@@ -9,7 +9,7 @@ nodes:
     nodeRegistration:
       kubeletExtraArgs:
         node-labels: "cncf-project=wg-green-reviews,cncf-project-sub=internal"
-- role: benchmark
+- role: worker
   kubeadmConfigPatches:
   - |
     kind: InitConfiguration
