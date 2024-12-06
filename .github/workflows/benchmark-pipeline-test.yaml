@@ -25,25 +25,14 @@ jobs:
 
           sleep 20
 
-          kubectl get helmrelease -A
-          kubectl get pods -A
-          
           kubectl wait pod \
           --all \
           --for=condition=Ready \
           --namespace monitoring
-          
-          kubectl get helmrelease -A
-          kubectl get pods -A
 
           flux reconcile helmrelease -n flux-system kepler
-         
-          sleep 30
-          
-          kubectl get helmrelease -A
-          kubectl get pods -A
 
           kubectl wait pod \
           --all \
           --for=condition=Ready \
-          --namespace kepler
+          --namespace monitoring
