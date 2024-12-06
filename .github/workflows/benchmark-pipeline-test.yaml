@@ -16,11 +16,11 @@ jobs:
         run: flux install
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
-      - name: Run the benchmark job
+      - name: Install kepler
         run: |
           kubectl apply -f clusters/base/kepler.yaml
 
-          sleep 10
+          sleep 30
 
           kubectl wait pod \
           --all \
