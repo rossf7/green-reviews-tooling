@@ -38,7 +38,10 @@ jobs:
 
           flux reconcile helmrelease -n flux-system kepler
          
-          sleep 20
+          sleep 30
+          
+          kubectl get helmrelease -A
+          kubectl get pods -A
 
           kubectl wait pod \
           --all \
