@@ -12,15 +12,18 @@ jobs:
         uses: fluxcd/flux2/action@main
       - name: Setup Kubernetes Kind
         uses: helm/kind-action@main
-      - name: Install Flux in Kubernetes Kind
-        run: flux install
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
       - name: Install kepler
         run: |
-          kubectl apply -f clusters/base/kepler.yaml
+          flux bootstrap github \
+            --owner=${{ github.repository_owner }} \
+            --repository=${{ github.repository }} \
+            --branch=${{ github.ref_name }} \
+            --path=./clusters \
+            --personal \
+            --token=${{ secrets.GITHUB_TOKEN }} \
+            --readonly
 
-          sleep 30
+          sleep 20
 
           kubectl wait pod \
           --all \
