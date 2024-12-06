@@ -1,0 +1,28 @@
+name: Benchmark Pipeline Test
+
+on: [pull_request, push]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Setup Kubernetes Kind
+        uses: helm/kind-action@main
+      - name: Install Flux in Kubernetes Kind
+        run: flux install
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+      - name: Run the benchmark job
+        run: |
+          kubectl apply -f clusters/base/kepler.yaml
+
+          sleep 20
+
+          kubectl wait pod \
+          --all \
+          --for=condition=Ready \
+          --namespace kepler
