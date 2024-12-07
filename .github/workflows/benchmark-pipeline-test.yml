@@ -6,7 +6,7 @@ jobs:
   setup_kind_cluster:
     runs-on: ubuntu-24.04
     steps:
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
       - name: Setup Kind cluster
@@ -28,3 +28,7 @@ jobs:
           --all \
           --for=condition=Ready \
           --namespace monitoring
+      - name: Generate kubeconfig
+        run: |
+          ./scripts/gen-kubeconfig.sh pipeline
+  
