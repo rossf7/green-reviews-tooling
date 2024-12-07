@@ -6,29 +6,22 @@ on:
       cncf_project:
         description: Project to be deployed e.g. falco
         required: true
-        default: falco
-        type: choice
-        options:
-          - falco
+        type: string
       config:
         description: Configuration if project has multiple variants they wish to test (defaults to all)
         required: false
-        default: ebpf
         type: string
       version:
         description: Version of project to be tested e.g. 0.37.0
         required: true
-        default: 0.37.0
         type: string
       benchmark_job_url:
         description: URL of the benchmark job
         required: true
-        default: 'https://raw.githubusercontent.com/falcosecurity/cncf-green-review-testing/e93136094735c1a52cbbef3d7e362839f26f4944/benchmark-tests/falco-benchmark-tests.yaml'
         type: string
       benchmark_job_duration_mins:
         description: Duration of the benchmark job
         required: true
-        default: 2
         type: number
 
 concurrency:
