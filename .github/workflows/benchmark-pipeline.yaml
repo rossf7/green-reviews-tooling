@@ -1,7 +1,7 @@
 name: Benchmark Pipeline
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       cncf_project:
         description: Project to be deployed e.g. falco

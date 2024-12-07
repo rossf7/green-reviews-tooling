@@ -31,4 +31,13 @@ jobs:
       - name: Generate kubeconfig
         run: |
           ./scripts/gen-kubeconfig.sh pipeline
+          ls -l
   
+  test_pipeline:
+    uses: .github/workflows/benchmark-pipeline.yaml
+    with:
+      cncf_project: falco
+      config: modern-ebpf
+      version: 0.39.2
+      benchmark_job_url: 	https://raw.githubusercontent.com/falcosecurity/cncf-green-review-testing/e93136094735c1a52cbbef3d7e362839f26f4944/benchmark-tests/falco-benchmark-tests.yaml
+      benchmark_job_duration_mins: 2
