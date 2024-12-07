@@ -34,7 +34,7 @@ jobs:
           ls -l
   
   test_pipeline:
-    uses: .github/workflows/benchmark-pipeline.yaml
+    uses: .github/workflows/benchmark-pipeline.yaml@${{ github.ref_name }}
     with:
       cncf_project: falco
       config: modern-ebpf
