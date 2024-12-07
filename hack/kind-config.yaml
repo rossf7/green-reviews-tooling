@@ -4,5 +4,12 @@ nodes:
 - role: control-plane
 - role: worker
   labels:
-    cncf-project: wg-green-reviews
-    cncf-project-sub: internal
+    cncf-project: "wg-green-reviews"
+    cncf-project-sub: "internal"
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: KubeletConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "node-role.kubernetes.io/benchmark=true"

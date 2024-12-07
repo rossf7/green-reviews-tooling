@@ -25,11 +25,6 @@ jobs:
 
           sleep 20
 
-          kubectl wait pod \
-          --all \
-          --for=condition=Ready \
-          --namespace monitoring
-
           flux reconcile helmrelease -n flux-system kepler
 
           kubectl wait pod \
