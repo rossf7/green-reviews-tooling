@@ -1,29 +1,35 @@
 name: Benchmark Pipeline
 
 on:
-  workflow_call:
+  push:
+  workflow_dispatch:
     inputs:
       cncf_project:
         description: Project to be deployed e.g. falco
         required: true
+        default: falco
         type: choice
         options:
           - falco
       config:
         description: Configuration if project has multiple variants they wish to test (defaults to all)
         required: false
+        default: ebpf
         type: string
       version:
         description: Version of project to be tested e.g. 0.37.0
         required: true
+        default: 0.37.0
         type: string
       benchmark_job_url:
         description: URL of the benchmark job
         required: true
+        default: 'https://raw.githubusercontent.com/falcosecurity/cncf-green-review-testing/e93136094735c1a52cbbef3d7e362839f26f4944/benchmark-tests/falco-benchmark-tests.yaml'
         type: string
       benchmark_job_duration_mins:
         description: Duration of the benchmark job
         required: true
+        default: 2
         type: number
 
 concurrency:
@@ -53,7 +59,9 @@ jobs:
         with:
           version: v1.30.2
         id: install
-      - run: mkdir ~/.kube && echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      #- run: mkdir ~/.kube && echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      - name: Create kind test cluster
+        uses: .github/workflows/benchmark-pipeline.yaml@wip-integration-test
       - name: Select the manifest
         run: |
           MANIFEST=projects/${{ inputs.cncf_project }}
