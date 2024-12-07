@@ -1,0 +1,30 @@
+name: Benchmark Pipeline Test
+
+on: [push]
+
+jobs:
+  setup_kind_cluster:
+    runs-on: ubuntu-24.04
+    steps:
+        uses: actions/checkout@v4
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Setup Kind cluster
+        uses: helm/kind-action@main
+        with:
+          config: hack/kind-config.yaml
+      - run: flux install
+      - uses: azure/setup-kubectl@v4
+      - name: Bootstrap cluster
+        run: |
+          kubectl apply -f clusters/base/monitoring-namespace.yaml
+          kubectl apply -f clusters/base/
+
+          sleep 20
+
+          flux reconcile helmrelease -n flux-system kepler
+
+          kubectl wait pod \
+          --all \
+          --for=condition=Ready \
+          --namespace monitoring
