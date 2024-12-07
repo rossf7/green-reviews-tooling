@@ -35,4 +35,6 @@ jobs:
 
   test_pipeline:
     needs: setup_kind_cluster
-   uses: ./.github/workflows/benchmark-pipeline.yaml
+    uses: ./.github/workflows/benchmark-pipeline.yaml
+    with:
+      cncf_project: falco
