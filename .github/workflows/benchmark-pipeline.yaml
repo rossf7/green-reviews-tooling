@@ -1,7 +1,7 @@
 name: Benchmark Pipeline
 
 on:
-  push:
+  workflow_call:
   workflow_dispatch:
     inputs:
       cncf_project:
@@ -50,12 +50,8 @@ jobs:
           echo "| benchmark_job_url | ${{ github.event.inputs.benchmark_job_url }} |" >> $GITHUB_STEP_SUMMARY
           echo "| benchmark_job_duration_mins | ${{ github.event.inputs.benchmark_job_duration_mins }} |" >> $GITHUB_STEP_SUMMARY
 
-  setup_kind_cluster:
-   uses: ./.github/workflows/kind-test-cluster.yml
-
   deploy:
     runs-on: ubuntu-24.04
-    needs: setup_kind_cluster
     steps:
       - uses: actions/checkout@v4
       - uses: azure/setup-kubectl@v4

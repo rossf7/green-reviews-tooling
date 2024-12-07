@@ -1,6 +1,6 @@
 name: Setup Kind Test Cluster
 
-on: workflow_call
+on: push
 
 jobs:
   setup_kind_cluster:
@@ -32,3 +32,7 @@ jobs:
         run: |
           ./scripts/gen-kubeconfig.sh pipeline
           ls -l
+
+  test_pipeline:
+    needs: setup_kind_cluster
+   uses: ./.github/workflows/benchmark-pipeline.yaml
