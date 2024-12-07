@@ -61,7 +61,7 @@ jobs:
         id: install
       #- run: mkdir ~/.kube && echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
       - name: Create kind test cluster
-        uses: .github/workflows/benchmark-pipeline.yaml@wip-integration-test
+        uses: .github/workflows/kind-test-cluster.yaml@wip-integration-test
       - name: Select the manifest
         run: |
           MANIFEST=projects/${{ inputs.cncf_project }}
