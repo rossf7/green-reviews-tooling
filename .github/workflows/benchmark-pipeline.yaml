@@ -55,6 +55,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-24.04
+    needs: setup_kind_cluster
     steps:
       - uses: actions/checkout@v4
       - uses: azure/setup-kubectl@v4
