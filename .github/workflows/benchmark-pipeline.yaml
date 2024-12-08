@@ -53,7 +53,19 @@ jobs:
         with:
           version: v1.30.2
         id: install
-      - run: mkdir ~/.kube && echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      # - run: mkdir ~/.kube && echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+      - name: Install Flux CLI
+        uses: fluxcd/flux2/action@main
+      - name: Create Kind cluster
+        uses: helm/kind-action@main
+        with:
+          config: hack/kind-config.yaml
+      - name: Setup Kind cluster
+        run: ./scripts/setup-kind-cluster.sh
+      - name: Setup Kind cluster
+        run: |
+          ./scripts/generate-kube-config.sh pipeline
+          mkdir ~/.kube && cp ./green-reviews-cluster-pipeline-config ~/.kube/config
       - name: Select the manifest
         run: |
           MANIFEST=projects/${{ inputs.cncf_project }}
