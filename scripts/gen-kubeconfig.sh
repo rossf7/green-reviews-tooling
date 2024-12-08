@@ -7,8 +7,6 @@ fi
 
 ROLE_TYPE="$1"
 
-kubectl apply -f ${ROLE_TYPE}-kubeconfig-resources.yaml
-
 USER_TOKEN_VALUE=$(kubectl -n kube-system get secret/${ROLE_TYPE}-account-token -o=go-template='{{.data.token}}' | base64 --decode)
 CURRENT_CONTEXT=$(kubectl config current-context)
 CURRENT_CLUSTER=$(kubectl config view --raw -o=go-template='{{range .contexts}}{{if eq .name "'''${CURRENT_CONTEXT}'''"}}{{ index .context "cluster" }}{{end}}{{end}}')
