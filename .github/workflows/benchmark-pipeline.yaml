@@ -62,7 +62,7 @@ jobs:
           config: hack/kind-config.yaml
       - name: Setup Kind cluster
         run: ./scripts/setup-kind-cluster.sh
-      - name: Setup Kind cluster
+      - name: Generate kube config
         run: |
           ./scripts/generate-kube-config.sh pipeline
           mkdir ~/.kube && cp ./green-reviews-cluster-pipeline-config ~/.kube/config
